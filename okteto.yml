@@ -16,10 +16,6 @@ build:
 # The deploy section defines how to deploy your development environment
 # More info: https://www.okteto.com/docs/reference/manifest/#deploy
 deploy:
-  webdash:
-    context: .
-    dockerfile: Dockerfile
-
 
 # The dependencies section defines other git repositories to be deployed as part of your development environment
 # More info: https://www.okteto.com/docs/reference/manifest/#dependencies
