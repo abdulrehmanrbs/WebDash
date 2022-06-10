@@ -1,0 +1,45 @@
+name: webdash
+
+# The build section defines how to build the images of your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#build
+build:
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_WEBDASH_REGISTRY: image registry
+  #  - OKTETO_BUILD_WEBDASH_REPOSITORY: image repo
+  #  - OKTETO_BUILD_WEBDASH_IMAGE: image name
+  #  - OKTETO_BUILD_WEBDASH_TAG: image tag
+  webdash:
+    context: .
+    dockerfile: Dockerfile
+
+# The deploy section defines how to deploy your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#deploy
+# deploy:
+#   commands:
+#   - name: Deploy
+#     command: echo 'Replace this line with the proper 'helm' or 'kubectl' commands to deploy your development environment'
+
+
+# The dependencies section defines other git repositories to be deployed as part of your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#dependencies
+# dependencies:
+#   - https://github.com/okteto/sample
+
+
+# The dev section defines how to activate a development container
+# More info: https://www.okteto.com/docs/reference/manifest/#dev
+dev:
+  webdash:
+    image: okteto/python:3
+    command: bash
+    sync:
+      - .:/usr/src/app
+    forward:
+      - 8080:8080
+    reverse:
+      - 9000:9000
+    autocreate: true
+    volumes:
+      - /root/.cache/pip
+
