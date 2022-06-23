@@ -2,7 +2,6 @@ services:
   fastapi:
     public: true
     image: abdulrehmanrbs/website:latest
-    image: profgilani79/website:latest
     build: .
     replicas: 1
     ports:
