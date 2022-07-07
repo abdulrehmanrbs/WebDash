@@ -1,13 +1,20 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
 
+from . import crud, models
+from .database import SessionLocal, engine
+
+models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
-@app.get("/")
-def welcome():
-    x = {"message": "HELLO WORLD!!! Welcome to fastAPI!!!"}
-    return x
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@app.get("/waffle")
-def welcome():
-    x = {"message": "Belgian Waffle with Fresh Strawberry, extra Chocolate Chips and fresh Whipped Cream"}
+@app.get("/")
+def welcome(db: Session=Depends(get_db)):
+    x = crud.get_salary(db)
     return x
