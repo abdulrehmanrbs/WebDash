@@ -31,7 +31,7 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
     px.defaults.width = 266
     px.defaults.height = 200
 
-    fig = px.bar(df.head(10),x='Player', y='Salary', color='position').update_xaxes(categoryorder="total descending")
+    fig = px.bar(df.head(10),x='player', y='salary', color='position').update_xaxes(categoryorder="total descending")
     fig.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
@@ -42,7 +42,7 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
     dfteam = dfteam.reset_index()
     dfteam = dfteam.sort_values('salary', ascending=False).head(10)
 
-    fig10 = px.bar(dfteam, x='Team', y='Salary')
+    fig10 = px.bar(dfteam, x='team', y='salary')
     fig10.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
@@ -50,7 +50,7 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
     team10 = fig10.to_html(full_html=False, include_plotlyjs='cdn')
 
     dfteam = df.loc[df['team'].isin(dfteam.team)]
-    figteam = px.bar(dfteam, x='Team', y='Salary', color='position').update_xaxes(categoryorder="total descending")
+    figteam = px.bar(dfteam, x='team', y='salary', color='position').update_xaxes(categoryorder="total descending")
     figteam.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
@@ -59,7 +59,7 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
 
     pos10 = dfteam.groupby('position')['salary'].mean().sort_values(ascending=False).head(10)
     pos10 = pos10.reset_index()
-    figpos = px.box(dfteam.loc[dfteam['position'].isin(pos10.position)], x='Position', y='Salary')
+    figpos = px.box(dfteam.loc[dfteam['position'].isin(pos10.position)], x='position', y='salary')
     figpos.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
@@ -73,7 +73,7 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
 
     pos10 = dfteam.groupby('position')['salary'].mean().sort_values(ascending=False).head(10)
     pos10 = pos10.reset_index()
-    figpos2 = px.box(dfteam.loc[dfteam['position'].isin(pos10.position)], x='Position', y='Salary', color_discrete_sequence=['red'])
+    figpos2 = px.box(dfteam.loc[dfteam['position'].isin(pos10.position)], x='position', y='salary', color_discrete_sequence=['red'])
     figpos2.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
