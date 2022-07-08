@@ -1,10 +1,21 @@
 <html>
- <head>
-  <title>NFL Dashboard</title>
- </head>
- <body>
-  <h1>Chart</h1>
-   {{top10|safe}}
-   {{team10|safe}}
- </body>
+  <head>
+      <title>NFL Web Dashboard</title>
+      <link href="/static/style.css" type="text/css" rel="stylesheet">
+  </head>
+  <body>
+      <h1>Chart</h1>
+      <div class="container">
+        <div class="item"></div>
+        <div class="item">{{top10|safe}}</div>
+        <div class="item">{{teamsalary|safe}}</div>
+        <div class="item">{{pospie|safe}}</div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item">{{possalary|safe}}</div>
+        <div class="item">{{possalary2|safe}}</div>
+        <div class="item">{{team10|safe}}</div>
+        <div class="item"></div>
+      </div>
+  </body>
 </html>
