@@ -28,8 +28,8 @@ def get_db():
 async def welcome(request: Request, db: Session=Depends(get_db)):
     x=crud.get_sepsis(db)
     df = pd.DataFrame.from_records(x,columns=['authors','year','journal'])
-    px.defaults.width = 266
-    px.defaults.height = 200
+    px.defaults.width = 800
+    px.defaults.height = 600
 
     authors10 = df['authors'].value_counts().reset_index().head(10)
     fig1 = px.histogram(authors10, x='index', y='authors')
