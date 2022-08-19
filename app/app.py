@@ -54,7 +54,7 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
         margin=dict(l=0, r=0, t=0, b=0))
     page3 = fig3.to_html(full_html=False, include_plotlyjs='cdn')
 
-        dft = df.sort_values('year').tail(10000)
+    dft = df.sort_values('year').tail(10000)
 
     fig4 = px.histogram(dft, x='authors', color='year')
     fig4.update_layout(yaxis = dict(tickfont = dict(size=5)),
