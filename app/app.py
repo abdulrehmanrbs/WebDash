@@ -26,69 +26,59 @@ def get_db():
 
 @app.get("/")
 async def welcome(request: Request, db: Session=Depends(get_db)):
-    x=crud.get_salary(db)
-    df = pd.DataFrame.from_records(x,columns=['player','position','team','salary'])
+    x=crud.get_sepsis(db)
+    df = pd.DataFrame.from_records(x,columns=['authors','year','journal'])
     px.defaults.width = 266
     px.defaults.height = 200
 
-    fig = px.bar(df.head(10),x='player', y='salary', color='position').update_xaxes(categoryorder="total descending")
-    fig.update_layout(yaxis = dict(tickfont = dict(size=5)),
+    dfauthors = df['authors'].value_counts()
+    dfauthors = dfauthors.head(10)
+    dfjournal = df['journal'].value_counts()
+    dfjournal = dfjournal.head(10)
+    dfyear = df.sort_values('year',ascending=False).head(10)
+
+    fig1 = px.bar(x=dfyear.index, y=dfyear.values).update_xaxes(categoryorder="total descending")
+    fig1.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
-    top10=fig.to_html(full_html=False, include_plotlyjs='cdn')
+    page1=fig1.to_html(full_html=False, include_plotlyjs='cdn')
 
-    dfteam = df.groupby('team')['salary'].sum()
-    dfteam = dfteam.reset_index()
-    dfteam = dfteam.sort_values('salary', ascending=False).head(10)
-
-    fig10 = px.bar(dfteam, x='team', y='salary')
-    fig10.update_layout(yaxis = dict(tickfont = dict(size=5)),
+    fig2 = px.bar(x=dfauthors.index, y=dfauthors.values)
+    fig2.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
-    team10 = fig10.to_html(full_html=False, include_plotlyjs='cdn')
+    page2 = fig2.to_html(full_html=False, include_plotlyjs='cdn')
 
-    dfteam = df.loc[df['team'].isin(dfteam.team)]
-    figteam = px.bar(dfteam, x='team', y='salary', color='position').update_xaxes(categoryorder="total descending")
-    figteam.update_layout(yaxis = dict(tickfont = dict(size=5)),
+    fig3 = px.bar(x=dfjournal.index, y=dfjournal.values)
+    fig3.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
-    teamsalary = figteam.to_html(full_html=False, include_plotlyjs='cdn')
+    page3 = fig3.to_html(full_html=False, include_plotlyjs='cdn')
 
-    pos10 = dfteam.groupby('position')['salary'].mean().sort_values(ascending=False).head(10)
-    pos10 = pos10.reset_index()
-    figpos = px.box(dfteam.loc[dfteam['position'].isin(pos10.position)], x='position', y='salary')
-    figpos.update_layout(yaxis = dict(tickfont = dict(size=5)),
+    dft = df.groupby('authors').head(5).sort_values('year')
+    fig4 = px.pie(dft,values='year', names='journal')
+    fig4.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
-    possalary = figpos.to_html(full_html=False, include_plotlyjs='cdn')
+    page4 = fig4.to_html(full_html=False, include_plotlyjs='cdn')
 
-    bottom10 = df.groupby('team')['salary'].sum()
-    bottom10 = bottom10.reset_index()
-    bottom10 = dfteam.sort_values('salary', ascending=False).tail(10)
-    dfteam = df.loc[df['team'].isin(bottom10.team)]
-
-    pos10 = dfteam.groupby('position')['salary'].mean().sort_values(ascending=False).head(10)
-    pos10 = pos10.reset_index()
-    figpos2 = px.box(dfteam.loc[dfteam['position'].isin(pos10.position)], x='position', y='salary', color_discrete_sequence=['red'])
-    figpos2.update_layout(yaxis = dict(tickfont = dict(size=5)),
+    fig5 = px.histogram(dft, x='journal', color='year')
+    fig5.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
-    possalary2 = figpos2.to_html(full_html=False, include_plotlyjs='cdn')
+    page5 = fig5.to_html(full_html=False, include_plotlyjs='cdn')
 
-    dfteam = df.groupby('position')['salary'].mean()
-    dfteam = dfteam.reset_index()
-    dfteam = dfteam.sort_values('salary', ascending=False)
-
-    figpie = px.pie(dfteam, values='salary', names='position')
-    figpie.update_layout(yaxis = dict(tickfont = dict(size=5)),
+    dft = df.groupby('authors').tail(5).sort_values('year')
+    fig6 = px.histogram(dft, x='journal', color='year')
+    fig6.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
-    pospie = figpie.to_html(full_html=False, include_plotlyjs='cdn')
+    page6 = fig6.to_html(full_html=False, include_plotlyjs='cdn')
 
-    return templates.TemplateResponse("chart.html", {"request": request, "top10":top10, "team10":team10, "teamsalary":teamsalary,"possalary":possalary,"possalary2":possalary2,"pospie":pospie})
+    return templates.TemplateResponse("chart.html", {"request":request, "page1":page1, "page2":page2, "page3":page3, "page4":page4, "page5":page5, "page6":page6})
