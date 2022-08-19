@@ -36,30 +36,30 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
     dfjournal = df['journal'].value_counts()
     dfjournal = dfjournal.head(10)
     dfyear = df.sort_values('year',ascending=False).head(10)
+    dft = df.groupby('authors').head(5).sort_values('year')
 
-    fig1 = px.bar(x=dfyear.index, y=dfyear.values).update_xaxes(categoryorder="total descending")
+    fig1 = px.histogram(dft, x='journal', color='year')
     fig1.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
     page1=fig1.to_html(full_html=False, include_plotlyjs='cdn')
 
-    fig2 = px.bar(x=dfauthors.index, y=dfauthors.values)
+    fig2 = px.histogram(dft, x='journal', color='year')
     fig2.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
     page2 = fig2.to_html(full_html=False, include_plotlyjs='cdn')
 
-    fig3 = px.bar(x=dfjournal.index, y=dfjournal.values)
+    fig3 = px.histogram(dft, x='journal', color='year')
     fig3.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
     page3 = fig3.to_html(full_html=False, include_plotlyjs='cdn')
 
-    dft = df.groupby('authors').head(5).sort_values('year')
-    fig4 = px.pie(dft,values='year', names='journal')
+    fig4 = px.histogram(dft, x='journal', color='year')
     fig4.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
