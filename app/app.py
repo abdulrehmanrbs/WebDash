@@ -47,7 +47,7 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
         margin=dict(l=0, r=0, t=0, b=0))
     page2 = fig2.to_html(full_html=False, include_plotlyjs='cdn')
     
-    authors10_journals = df.loc[(df['authors'].isin(authors10['index']),'journal'].value_counts().reset_index().head(10)
+    authors10_journals = df.loc[df['authors'].isin(authors10['index']),'journal'].value_counts().reset_index().head(10)
     fig3 = px.histogram(authors10_journals, title='Preferred 10 Journals by Top 10 Sepsis Researchers (Overall)', x='index', y='journal')
     fig3.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
