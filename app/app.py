@@ -31,46 +31,48 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
     px.defaults.width = 266
     px.defaults.height = 200
 
-    dft = df.sort_values('year').head(1000)
-
-    fig1 = px.histogram(dft, x='authors', color='year')
+    authors10 = df['authors'].value_counts().reset_index().head(10)
+    fig1 = px.histogram(authors10, title='Top 10 Authors in Sepsis Research (Overall)', x='index', y='authors')
     fig1.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
     page1 = fig1.to_html(full_html=False, include_plotlyjs='cdn')
 
-    fig2 = px.histogram(dft, x='year', color='journal')
+    journals10 = df['journal'].value_counts().reset_index().head(10)
+    fig2 = px.histogram(journals10, title='Top 10 Journals in Sepsis Research (Overall)', x='index', y='journal')
     fig2.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
     page2 = fig2.to_html(full_html=False, include_plotlyjs='cdn')
-
-    fig3 = px.histogram(dft, x='authors', color='journal')
+    
+    authors10_journals = df.loc[(df['authors'].isin(authors10['index']),'journal'].value_counts().reset_index().head(10)
+    fig3 = px.histogram(authors10_journals, title='Preferred 10 Journals by Top 10 Sepsis Researchers (Overall)', x='index', y='journal')
     fig3.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
     page3 = fig3.to_html(full_html=False, include_plotlyjs='cdn')
 
-    dft = df.sort_values('year').tail(1000)
-
-    fig4 = px.histogram(dft, x='authors', color='year')
+    authors10_yrs = df.loc[(df['year'] >= 2017),'authors'].value_counts().reset_index().head(10)
+    fig4 = px.histogram(authors10_yrs, title='Top 10 Authors in Sepsis Research (Past 5 Years)', x='index', y='authors')
     fig4.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
     page4 = fig4.to_html(full_html=False, include_plotlyjs='cdn')
 
-    fig5 = px.histogram(dft, x='year', color='journal')
+    journals10_yrs = df.loc[(df['year'] >= 2017),'journal'].value_counts().reset_index().head(10)
+    fig5 = px.histogram(journals10_yrs, title='Top 10 Journals in Sepsis Research (Past 5 Years)', x='index', y='journal')
     fig5.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
     page5 = fig5.to_html(full_html=False, include_plotlyjs='cdn')
-
-    fig6 = px.histogram(dft, x='authors', color='journal')
+    
+    journals_recent_yrs = df.loc[(df['year'] >= 2019),'journal'].value_counts().reset_index().head(50)
+    fig6 = px.pie(journals_recent_yrs, title='Top 50 Journals for Sepsis Research in Recent Years', names='index', values='journal')
     fig6.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
