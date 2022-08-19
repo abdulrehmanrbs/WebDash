@@ -38,21 +38,21 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
     dfyear = df.sort_values('year',ascending=False).head(10)
     dft = df.groupby('authors').head(5).sort_values('year')
 
-    fig1 = px.histogram(dft, x='journal', color='year')
+    fig1 = px.histogram(dfyear, x='year')
     fig1.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
-    page1=fig1.to_html(full_html=False, include_plotlyjs='cdn')
+    page1 = fig1.to_html(full_html=False, include_plotlyjs='cdn')
 
     fig2 = px.histogram(dft, x='journal', color='year')
     fig2.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
-    page2 = fig2.to_html(full_html=False, include_plotlyjs='cdn')
+    page2=fig2.to_html(full_html=False, include_plotlyjs='cdn')
 
-    fig3 = px.histogram(dft, x='journal', color='year')
+    fig3 = px.histogram(dft, x='authors', color='year')
     fig3.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
