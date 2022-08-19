@@ -31,7 +31,7 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
     px.defaults.width = 266
     px.defaults.height = 200
 
-    dft = df.sort_values('year').head(10000)
+    dft = df.sort_values('year').head(1000)
 
     fig1 = px.histogram(dft, x='authors', color='year')
     fig1.update_layout(yaxis = dict(tickfont = dict(size=5)),
@@ -54,7 +54,7 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
         margin=dict(l=0, r=0, t=0, b=0))
     page3 = fig3.to_html(full_html=False, include_plotlyjs='cdn')
 
-    dft = df.sort_values('year').tail(10000)
+    dft = df.sort_values('year').tail(1000)
 
     fig4 = px.histogram(dft, x='authors', color='year')
     fig4.update_layout(yaxis = dict(tickfont = dict(size=5)),
