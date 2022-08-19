@@ -28,54 +28,54 @@ def get_db():
 async def welcome(request: Request, db: Session=Depends(get_db)):
     x=crud.get_sepsis(db)
     df = pd.DataFrame.from_records(x,columns=['authors','year','journal'])
-    px.defaults.width = 800
-    px.defaults.height = 600
+    px.defaults.width = 640
+    px.defaults.height = 480
 
     authors10 = df['authors'].value_counts().reset_index().head(10)
     fig1 = px.histogram(authors10, x='index', y='authors')
-    fig1.update_layout(yaxis = dict(tickfont = dict(size=5)),
-        xaxis = dict(tickfont = dict(size=5)),
-        font=dict(size=5),
+    fig1.update_layout(yaxis = dict(tickfont = dict(size=12)),
+        xaxis = dict(tickfont = dict(size=12)),
+        font=dict(size=12),
         margin=dict(l=0, r=0, t=0, b=0))
     page1 = fig1.to_html(full_html=False, include_plotlyjs='cdn')
 
     journals10 = df['journal'].value_counts().reset_index().head(10)
     fig2 = px.histogram(journals10, x='index', y='journal')
-    fig2.update_layout(yaxis = dict(tickfont = dict(size=5)),
-        xaxis = dict(tickfont = dict(size=5)),
-        font=dict(size=5),
+    fig2.update_layout(yaxis = dict(tickfont = dict(size=12)),
+        xaxis = dict(tickfont = dict(size=12)),
+        font=dict(size=12),
         margin=dict(l=0, r=0, t=0, b=0))
     page2 = fig2.to_html(full_html=False, include_plotlyjs='cdn')
     
     authors10_journals = df.loc[df['authors'].isin(authors10['index']),'journal'].value_counts().reset_index().head(10)
     fig3 = px.histogram(authors10_journals, x='index', y='journal')
-    fig3.update_layout(yaxis = dict(tickfont = dict(size=5)),
-        xaxis = dict(tickfont = dict(size=5)),
-        font=dict(size=5),
+    fig3.update_layout(yaxis = dict(tickfont = dict(size=12)),
+        xaxis = dict(tickfont = dict(size=12)),
+        font=dict(size=12),
         margin=dict(l=0, r=0, t=0, b=0))
     page3 = fig3.to_html(full_html=False, include_plotlyjs='cdn')
 
     authors10_yrs = df.loc[(df['year'] >= 2017),'authors'].value_counts().reset_index().head(10)
     fig4 = px.histogram(authors10_yrs, x='index', y='authors')
-    fig4.update_layout(yaxis = dict(tickfont = dict(size=5)),
-        xaxis = dict(tickfont = dict(size=5)),
-        font=dict(size=5),
+    fig4.update_layout(yaxis = dict(tickfont = dict(size=12)),
+        xaxis = dict(tickfont = dict(size=12)),
+        font=dict(size=12),
         margin=dict(l=0, r=0, t=0, b=0))
     page4 = fig4.to_html(full_html=False, include_plotlyjs='cdn')
 
     journals10_yrs = df.loc[(df['year'] >= 2017),'journal'].value_counts().reset_index().head(10)
     fig5 = px.histogram(journals10_yrs, x='index', y='journal')
-    fig5.update_layout(yaxis = dict(tickfont = dict(size=5)),
-        xaxis = dict(tickfont = dict(size=5)),
-        font=dict(size=5),
+    fig5.update_layout(yaxis = dict(tickfont = dict(size=12)),
+        xaxis = dict(tickfont = dict(size=12)),
+        font=dict(size=12),
         margin=dict(l=0, r=0, t=0, b=0))
     page5 = fig5.to_html(full_html=False, include_plotlyjs='cdn')
     
     journals_recent_yrs = df.loc[(df['year'] >= 2019),'journal'].value_counts().reset_index().head(25)
     fig6 = px.pie(journals_recent_yrs, names='index', values='journal')
-    fig6.update_layout(yaxis = dict(tickfont = dict(size=5)),
-        xaxis = dict(tickfont = dict(size=5)),
-        font=dict(size=5),
+    fig6.update_layout(yaxis = dict(tickfont = dict(size=12)),
+        xaxis = dict(tickfont = dict(size=12)),
+        font=dict(size=12),
         margin=dict(l=0, r=0, t=0, b=0))
     page6 = fig6.to_html(full_html=False, include_plotlyjs='cdn')
 
