@@ -38,20 +38,21 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
     dfyear = df.sort_values('year',ascending=False).head(10)
     dft = df.groupby('authors').head(5).sort_values('year')
 
-    fig1 = px.histogram(dfyear, x='year')
+    fig1 = px.histogram(dft, x='authors', color='year')
     fig1.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
     page1 = fig1.to_html(full_html=False, include_plotlyjs='cdn')
 
-    fig2 = px.histogram(dft, x='journal', color='year')
+    fig2 = px.histogram(dft, x='year', color='journal')
     fig2.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
         font=dict(size=5),
         margin=dict(l=0, r=0, t=0, b=0))
-    page2=fig2.to_html(full_html=False, include_plotlyjs='cdn')
+    page2 = fig2.to_html(full_html=False, include_plotlyjs='cdn')
 
+    dft = df.groupby('authors').tail(5).sort_values('year')
     fig3 = px.histogram(dft, x='authors', color='year')
     fig3.update_layout(yaxis = dict(tickfont = dict(size=5)),
         xaxis = dict(tickfont = dict(size=5)),
@@ -59,26 +60,4 @@ async def welcome(request: Request, db: Session=Depends(get_db)):
         margin=dict(l=0, r=0, t=0, b=0))
     page3 = fig3.to_html(full_html=False, include_plotlyjs='cdn')
 
-    fig4 = px.histogram(dft, x='journal', color='year')
-    fig4.update_layout(yaxis = dict(tickfont = dict(size=5)),
-        xaxis = dict(tickfont = dict(size=5)),
-        font=dict(size=5),
-        margin=dict(l=0, r=0, t=0, b=0))
-    page4 = fig4.to_html(full_html=False, include_plotlyjs='cdn')
-
-    fig5 = px.histogram(dft, x='journal', color='year')
-    fig5.update_layout(yaxis = dict(tickfont = dict(size=5)),
-        xaxis = dict(tickfont = dict(size=5)),
-        font=dict(size=5),
-        margin=dict(l=0, r=0, t=0, b=0))
-    page5 = fig5.to_html(full_html=False, include_plotlyjs='cdn')
-
-    dft = df.groupby('authors').tail(5).sort_values('year')
-    fig6 = px.histogram(dft, x='journal', color='year')
-    fig6.update_layout(yaxis = dict(tickfont = dict(size=5)),
-        xaxis = dict(tickfont = dict(size=5)),
-        font=dict(size=5),
-        margin=dict(l=0, r=0, t=0, b=0))
-    page6 = fig6.to_html(full_html=False, include_plotlyjs='cdn')
-
-    return templates.TemplateResponse("chart.html", {"request":request, "page1":page1, "page2":page2, "page3":page3, "page4":page4, "page5":page5, "page6":page6})
+    return templates.TemplateResponse("chart.html", {"request":request, "page1":page1, "page2":page2, "page3":page3})
